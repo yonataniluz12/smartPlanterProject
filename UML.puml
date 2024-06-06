@@ -1,0 +1,127 @@
+@startuml
+class com.example.smartplanterproject.PersonalInformation {
+~ EditText id
+~ String check
+~ Planter planter
+~ Intent gi
+# void onCreate(Bundle)
++ void goToMyPlanter(View)
+}
+
+
+class com.example.smartplanterproject.User {
+- String name
+- String id
++ String getName()
++ String getId()
++ void setName(String)
++ void setId(String)
+}
+
+
+class com.example.smartplanterproject.Planter {
+- String keyid
+- User user
+- String temp
+- boolean fan
+- boolean bereathWater
+- boolean sunLightSensor
+- boolean airSensor
+- boolean waterTank
++ boolean getAirSensor()
++ String getTemp()
++ boolean getWaterEmpty()
++ String getKeyid()
++ boolean getIsFan()
++ boolean getIsBereathWater()
++ boolean getIsSunLightSensor()
++ void setAirSensor(boolean)
++ void setBereathWater(boolean)
++ void setFan(boolean)
++ void setKeyid(String)
++ void setSunLightSensor(boolean)
++ void setWaterEmpty(boolean)
++ void setTemp(String)
+}
+
+
+class com.example.smartplanterproject.FBref {
++ {static} FirebaseDatabase FBDB
++ {static} DatabaseReference refUser
++ {static} DatabaseReference refFlowerpot
+}
+
+class com.example.smartplanterproject.NotificationHelper {
+- {static} String CHANNEL_ID
+- {static} String CHANNEL_NAME
+- {static} int NOTIFICATION_ID
++ {static} void showNotification(Context,String)
+}
+
+
+class com.example.smartplanterproject.Login {
+- FirebaseAuth mAuth
+# void onCreate(Bundle)
++ void onStart()
++ void LogIn(View)
+}
+
+
+class com.example.smartplanterproject.Credits {
+# void onCreate(Bundle)
+}
+
+class com.example.smartplanterproject.MyPlanters {
+~ String[] flowerBoxes
+~ ListView lv
+# void onCreate(Bundle)
++ void onPointerCaptureChanged(boolean)
++ void onItemClick(AdapterView<?>,View,int,long)
++ void addPlanter(View)
++ void onCreateContextMenu(ContextMenu,View,ContextMenu.ContextMenuInfo)
++ boolean onContextItemSelected(MenuItem)
+}
+
+
+class com.example.smartplanterproject.MainActivity {
+- FirebaseAuth mAuth
+~ Intent si
+~ EditText emailET
+~ Boolean checkData
+- NetworkStateReceiver networkStateReceiver
+# void onCreate(Bundle)
++ void onStart()
++ void register(View)
++ void goToLogin(View)
+}
+
+
+class com.example.smartplanterproject.ViewPlanter {
+~ TextView temp
+~ Switch fan
+~ Switch water
+~ String str
+~ int tempChek
+# void onCreate(Bundle)
++ void watering(View)
++ void Colding(View)
+}
+
+
+class com.example.smartplanterproject.NetworkStateReceiver {
++ void onReceive(Context,Intent)
+- void showMessage(Context,boolean)
+}
+
+
+
+androidx.appcompat.app.AppCompatActivity <|-- com.example.smartplanterproject.PersonalInformation
+androidx.appcompat.app.AppCompatActivity <|-- com.example.smartplanterproject.Login
+androidx.appcompat.app.AppCompatActivity <|-- com.example.smartplanterproject.Credits
+com.example.smartplanterproject.OnItemClickListener <|.. com.example.smartplanterproject.MyPlanters
+com.example.smartplanterproject.OnCreateContextMenuListener <|.. com.example.smartplanterproject.MyPlanters
+androidx.appcompat.app.AppCompatActivity <|-- com.example.smartplanterproject.MyPlanters
+androidx.appcompat.app.AppCompatActivity <|-- com.example.smartplanterproject.MainActivity
+androidx.appcompat.app.AppCompatActivity <|-- com.example.smartplanterproject.ViewPlanter
+android.content.BroadcastReceiver <|-- com.example.smartplanterproject.NetworkStateReceiver
+@enduml

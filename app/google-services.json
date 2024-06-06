@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "965942940042",
+    "firebase_url": "https://beta1project-default-rtdb.firebaseio.com",
+    "project_id": "beta1project",
+    "storage_bucket": "beta1project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:965942940042:android:0f770023510be14930b873",
+        "android_client_info": {
+          "package_name": "com.example.beta1project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxZA8LwT3o4GIOvx-UwvAevnriGHBwKAA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:965942940042:android:fff26be131b1959c30b873",
+        "android_client_info": {
+          "package_name": "com.example.beta2project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxZA8LwT3o4GIOvx-UwvAevnriGHBwKAA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:965942940042:android:04940a951bb4043930b873",
+        "android_client_info": {
+          "package_name": "com.example.smartplanterproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxZA8LwT3o4GIOvx-UwvAevnriGHBwKAA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
