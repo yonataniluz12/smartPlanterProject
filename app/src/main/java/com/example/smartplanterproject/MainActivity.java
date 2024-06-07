@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
      * The Check data.
      */
     Boolean checkData = false;
+    boolean isCreated = true;
     public NetworkStateReceiver networkStateReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +46,17 @@ public class MainActivity extends AppCompatActivity {
         passwordET = findViewById(R.id.editTextTextPassword);
 
 
+        networkStateReceiver = new NetworkStateReceiver();
+        IntentFilter connectFilter = new IntentFilter();
+        connectFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkStateReceiver,connectFilter);
+
+
     }
     @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly. ;
-        IntentFilter connectFilter = new IntentFilter();
-        connectFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(networkStateReceiver,connectFilter);
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null)
         {
@@ -60,6 +65,10 @@ public class MainActivity extends AppCompatActivity {
     }
     public void onStop() {
         super.onStop();
+
+    }
+    public void onDestroy() {
+        super.onDestroy();
         unregisterReceiver(networkStateReceiver);
     }
     /**
@@ -69,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void register(View view) {
 
-
+        if (emailET != null && passwordET != null) {
         mAuth.createUserWithEmailAndPassword(emailET.getText().toString(),passwordET.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -77,13 +86,17 @@ public class MainActivity extends AppCompatActivity {
 
                         if(task.isSuccessful())
                         {
-                            //si.putExtra("id",emailET.getText().toString());
                             startActivity(new Intent(MainActivity.this,PersonalInformation.class));
                         }
-                        else {
+                        else
+                        {
                             Toast.makeText(MainActivity.this,"register failed ",Toast.LENGTH_SHORT).show();}
                     }
                 });
+        }
+        else {
+            Toast.makeText(MainActivity.this, "Email or password field is null", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -95,5 +108,4 @@ public class MainActivity extends AppCompatActivity {
     {
         startActivity(new Intent(MainActivity.this,Login.class));
     }
-
 }

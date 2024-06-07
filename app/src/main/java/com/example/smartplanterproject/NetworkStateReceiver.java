@@ -26,11 +26,10 @@ public class NetworkStateReceiver extends BroadcastReceiver {
             if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
                 // There is an active data connection
                 showMessage(context, true);
-                Toast.makeText(context, "Data connection available", Toast.LENGTH_LONG).show();
             } else {
                 // There is no active data connection
                 showMessage(context, false);
-                Toast.makeText(context, "No data connection available", Toast.LENGTH_LONG).show();
+
             }
         }
         throw new UnsupportedOperationException("Not yet implemented");

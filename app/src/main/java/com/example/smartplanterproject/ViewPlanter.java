@@ -6,11 +6,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -39,10 +42,12 @@ public class ViewPlanter extends AppCompatActivity {
     /**
      * The Fan.
      */
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch fan;
     /**
      * The Water.
      */
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch water;
     /**
      * The Str.
@@ -58,6 +63,7 @@ public class ViewPlanter extends AppCompatActivity {
     ImageView iV;
     private NetworkStateReceiver networkStateReceiver;
     public StorageReference imagesRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,13 +80,12 @@ public class ViewPlanter extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot data : snapshot.getChildren())
-                {
+                for (DataSnapshot data : snapshot.getChildren()) {
                     str = (String) data.getKey();
                     Planter stuTmp = data.getValue(Planter.class);
-                    temp.setText("temperature: "+stuTmp.getTemp());
-                    sunLight.setText("Sunlight: "+ stuTmp.getIsSunLightSensor());
-                    humidity.setText("humidity: "+stuTmp.getAirSensor());
+                    temp.setText("temperature: " + stuTmp.getTemp());
+                    sunLight.setText("Sunlight: " + stuTmp.getIsSunLightSensor());
+                    humidity.setText("humidity: " + stuTmp.getAirSensor());
                 }
             }
 
@@ -89,19 +94,25 @@ public class ViewPlanter extends AppCompatActivity {
 
             }
         };
-        if(tempChek > 25){NotificationHelper.showNotification(this, "It is very hot, the fuel is ventilated for the seedling");}
+        if (tempChek > 25) {
+            NotificationHelper.showNotification(this, "It is very hot, the fuel is ventilated for the seedling");
+        }
     }
+
     @Override
     public void onStart() {
         super.onStart();
+        networkStateReceiver = new NetworkStateReceiver();
         IntentFilter connectFilter = new IntentFilter();
         connectFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(networkStateReceiver,connectFilter);}
+        registerReceiver(networkStateReceiver,connectFilter);
+    }
+
 
     public void onStop() {
         super.onStop();
         unregisterReceiver(networkStateReceiver);
-    }
+        }
     /**
      * Watering.
      *
@@ -145,5 +156,14 @@ public class ViewPlanter extends AppCompatActivity {
         }
         else {Toast.makeText(ViewPlanter.this,"the image not upload",Toast.LENGTH_LONG).show();}
 
+    }
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+    public boolean onContextItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.Credits){startActivity(new Intent(ViewPlanter.this,Credits.class));}
+        return true;
     }
 }

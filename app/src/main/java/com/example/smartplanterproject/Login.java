@@ -34,19 +34,20 @@ public class Login extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        IntentFilter connectFilter = new IntentFilter();
-        connectFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(networkStateReceiver,connectFilter);
+        //networkStateReceiver = new NetworkStateReceiver();
+        //IntentFilter connectFilter = new IntentFilter();
+        //connectFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        //registerReceiver(networkStateReceiver,connectFilter);
+
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null)
-        {
-            startActivity(new Intent(Login.this,MyPlanters.class));
-        }
+        if (currentUser != null) {
+            startActivity(new Intent(Login.this, MyPlanters.class));
+            finish();}
     }
 
     public void onStop() {
         super.onStop();
-        unregisterReceiver(networkStateReceiver);
+        //unregisterReceiver(networkStateReceiver);
     }
     /**
      * Log in.
@@ -63,6 +64,7 @@ public class Login extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             startActivity(new Intent(Login.this,MyPlanters.class));
+                            finish(); // Finish the current activity to prevent going back to it when pressing the back button
                         }
                         else {
                             // If sign in fails, display a message to the user.

@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -55,14 +56,16 @@ public class MyPlanters extends AppCompatActivity implements AdapterView.OnItemC
     public void addPlanter(View view) {
 
     }
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
-    {
-        menu.add("credits");
 
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
     }
     public boolean onContextItemSelected(MenuItem item) {
-        String oper=item.getTitle().toString();
-        if(oper.equals("credits")){startActivity(new Intent(MyPlanters.this,Credits.class));}
+        int id = item.getItemId();
+        if(id == R.id.Credits){startActivity(new Intent(MyPlanters.this,Credits.class));}
         return true;
+
+
     }
 }

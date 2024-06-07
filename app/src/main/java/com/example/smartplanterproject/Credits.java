@@ -12,7 +12,7 @@ import android.view.View.OnCreateContextMenuListener;
 /**
  * The type Credits.
  */
-public class Credits extends AppCompatActivity implements OnCreateContextMenuListener{
+public class Credits extends AppCompatActivity implements View.OnCreateContextMenuListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
