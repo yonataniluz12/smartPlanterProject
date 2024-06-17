@@ -3,6 +3,7 @@ package com.example.smartplanterproject;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
@@ -29,15 +30,17 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
 
+
+        networkStateReceiver = new NetworkStateReceiver();
+        IntentFilter connectFilter = new IntentFilter();
+        connectFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkStateReceiver,connectFilter);
+
     }
     @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        //networkStateReceiver = new NetworkStateReceiver();
-        //IntentFilter connectFilter = new IntentFilter();
-        //connectFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        //registerReceiver(networkStateReceiver,connectFilter);
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
@@ -45,10 +48,11 @@ public class Login extends AppCompatActivity {
             finish();}
     }
 
-    public void onStop() {
-        super.onStop();
-        //unregisterReceiver(networkStateReceiver);
+    public void onDestroy(){
+        super.onDestroy();
+        unregisterReceiver(networkStateReceiver);
     }
+
     /**
      * Log in.
      *

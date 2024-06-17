@@ -33,7 +33,7 @@ public class MyPlanters extends AppCompatActivity implements AdapterView.OnItemC
         setContentView(R.layout.activity_my_planters);
         lv = findViewById(R.id.listView);
         lv.setOnItemClickListener(this);
-        ArrayAdapter<String> adp = new ArrayAdapter<>(this,R.layout.activity_view_planter,flowerBoxes);
+        ArrayAdapter<String> adp = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,flowerBoxes);
         lv.setAdapter(adp);
     }
 
@@ -48,14 +48,7 @@ public class MyPlanters extends AppCompatActivity implements AdapterView.OnItemC
         startActivity(new Intent(MyPlanters.this,ViewPlanter.class));
     }
 
-    /**
-     * Add planter.
-     *
-     * @param view the view
-     */
-    public void addPlanter(View view) {
 
-    }
 
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.main, menu);

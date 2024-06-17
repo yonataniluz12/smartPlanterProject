@@ -32,10 +32,12 @@ public class ViewPlanter extends AppCompatActivity {
     /**
      * The Temp.
      */
-    TextView temp, /**
+    TextView temp,
+    /**
      * The Humidity.
      */
-    humidity, /**
+    humidity,
+    /**
      * The Sun light.
      */
     sunLight;
@@ -60,8 +62,14 @@ public class ViewPlanter extends AppCompatActivity {
      * @author yonatan iluz@
      */
     int tempChek;
+    /**
+     * The V.
+     */
     ImageView iV;
     private NetworkStateReceiver networkStateReceiver;
+    /**
+     * The Images ref.
+     */
     public StorageReference imagesRef;
 
     @Override
@@ -76,6 +84,12 @@ public class ViewPlanter extends AppCompatActivity {
         water = findViewById(R.id.switch2);
         tempChek = Integer.parseInt(temp.getText().toString());
         iV = findViewById(R.id.imageView);
+
+
+        networkStateReceiver = new NetworkStateReceiver();
+        IntentFilter connectFilter = new IntentFilter();
+        connectFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkStateReceiver,connectFilter);
         ValueEventListener stuListener = new ValueEventListener() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -99,20 +113,15 @@ public class ViewPlanter extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        networkStateReceiver = new NetworkStateReceiver();
-        IntentFilter connectFilter = new IntentFilter();
-        connectFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(networkStateReceiver,connectFilter);
+
+
+    public void onDestroy()
+    {
+        super.onDestroy();
+        unregisterReceiver(networkStateReceiver);
+
     }
 
-
-    public void onStop() {
-        super.onStop();
-        unregisterReceiver(networkStateReceiver);
-        }
     /**
      * Watering.
      *
@@ -143,6 +152,11 @@ public class ViewPlanter extends AppCompatActivity {
                 }
             }
 
+    /**
+     * See plant.
+     *
+     * @param view the view
+     */
     public void seePlant(View view)
     {
         if(imagesRef != null){

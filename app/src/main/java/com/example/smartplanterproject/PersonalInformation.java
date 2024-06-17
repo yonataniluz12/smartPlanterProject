@@ -26,7 +26,8 @@ public class PersonalInformation extends AppCompatActivity {
     /**
      * The Id.
      */
-    EditText id, /**
+    EditText id,
+    /**
      * The Name.
      */
     name;
@@ -48,19 +49,19 @@ public class PersonalInformation extends AppCompatActivity {
         id = findViewById(R.id.editTextTextEmailAddress3);
         name = findViewById(R.id.editTextText2);
 
-    }
-    public void onStop() {
-        super.onStop();
-        unregisterReceiver(networkStateReceiver);
-    }
-    @Override
-    public void onStart() {
-        super.onStart();
+
         networkStateReceiver = new NetworkStateReceiver();
         IntentFilter connectFilter = new IntentFilter();
         connectFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(networkStateReceiver,connectFilter);
     }
+
+
+    public void onDestroy(){
+        super.onDestroy();
+        unregisterReceiver(networkStateReceiver);
+    }
+
     /**
      * Go to my planter.
      *
