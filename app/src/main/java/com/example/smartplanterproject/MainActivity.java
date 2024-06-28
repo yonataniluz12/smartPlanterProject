@@ -24,19 +24,11 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
-    EditText  /**
-     * The Email et.
-     */
-    emailET, /**
-     * The Password et.
-     */
-    passwordET;
-    /**
-     * The Check data.
-     */
+    EditText emailET, passwordET;
     Boolean checkData = false;
     boolean isCreated = true;
     public NetworkStateReceiver networkStateReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,67 +37,51 @@ public class MainActivity extends AppCompatActivity {
         emailET = findViewById(R.id.editTextTextEmailAddress);
         passwordET = findViewById(R.id.editTextTextPassword);
 
-
         networkStateReceiver = new NetworkStateReceiver();
         IntentFilter connectFilter = new IntentFilter();
         connectFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(networkStateReceiver,connectFilter);
-
-
+        registerReceiver(networkStateReceiver, connectFilter);
     }
+
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly. ;
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null)
-        {
-            startActivity(new Intent(MainActivity.this,PersonalInformation.class));
+        if (currentUser != null) {
+            startActivity(new Intent(MainActivity.this, PersonalInformation.class));
         }
     }
+
+    @Override
     public void onStop() {
         super.onStop();
-
     }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         unregisterReceiver(networkStateReceiver);
     }
-    /**
-     * Register.
-     *
-     * @param view the view
-     */
+
     public void register(View view) {
-
         if (emailET != null && passwordET != null) {
-        mAuth.createUserWithEmailAndPassword(emailET.getText().toString(),passwordET.getText().toString())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-
-                        if(task.isSuccessful())
-                        {
-                            startActivity(new Intent(MainActivity.this,PersonalInformation.class));
+            mAuth.createUserWithEmailAndPassword(emailET.getText().toString(), passwordET.getText().toString())
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                startActivity(new Intent(MainActivity.this, PersonalInformation.class));
+                            } else {
+                                Toast.makeText(MainActivity.this, "Register failed", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                        else
-                        {
-                            Toast.makeText(MainActivity.this,"register failed ",Toast.LENGTH_SHORT).show();}
-                    }
-                });
-        }
-        else {
+                    });
+        } else {
             Toast.makeText(MainActivity.this, "Email or password field is null", Toast.LENGTH_SHORT).show();
         }
     }
 
-    /**
-     * Go to login.
-     *
-     * @param view the view
-     */
-    public void goToLogin(View view)
-    {
-        startActivity(new Intent(MainActivity.this,Login.class));
+    public void goToLogin(View view) {
+        startActivity(new Intent(MainActivity.this, Login.class));
     }
 }
