@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,10 +21,8 @@ public class MyPlanters extends AppCompatActivity implements AdapterView.OnItemC
     /**
      * The Flower boxes.
      */
-    String [] flowerBoxes = {"planter1","planter2","planter3"};
-    /**
-     * The Lv.
-     */
+    private static final String TAG = "MyPlanters";
+    String[] flowerBoxes = {"planter1", "planter2", "planter3"};
     ListView lv;
 
     @SuppressLint("MissingInflatedId")
@@ -33,8 +32,9 @@ public class MyPlanters extends AppCompatActivity implements AdapterView.OnItemC
         setContentView(R.layout.activity_my_planters);
         lv = findViewById(R.id.listView);
         lv.setOnItemClickListener(this);
-        ArrayAdapter<String> adp = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,flowerBoxes);
+        ArrayAdapter<String> adp = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, flowerBoxes);
         lv.setAdapter(adp);
+
     }
 
     @Override
@@ -44,21 +44,23 @@ public class MyPlanters extends AppCompatActivity implements AdapterView.OnItemC
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-        startActivity(new Intent(MyPlanters.this,ViewPlanter.class));
+        Intent intent = new Intent(MyPlanters.this, ViewPlanter.class);
+        intent.putExtra("planterNum",i);
+        startActivity(intent);
     }
 
-
-
-    public boolean onCreateOptionsMenu(Menu menu){
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+
+    @Override
     public boolean onContextItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.Credits){startActivity(new Intent(MyPlanters.this,Credits.class));}
+        if (id == R.id.Credits) {
+            startActivity(new Intent(MyPlanters.this, Credits.class));
+        }
         return true;
-
-
     }
 }

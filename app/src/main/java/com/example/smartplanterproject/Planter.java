@@ -5,14 +5,15 @@ package com.example.smartplanterproject;
  */
 public class Planter {
 
-    private String keyid;
-    private User user;
+    private String Uid;
+    private int serNum;
     private String temp;
     private boolean fan;
     private boolean bereathWater;
     private boolean sunLightSensor;
     private boolean airSensor;
     private boolean waterTank;
+
 
     /**
      * Instantiates a new Planter.
@@ -26,14 +27,15 @@ public class Planter {
      * @param airSensor      the air sensor
      * @param waterTank      the water tank
      */
-    public Planter(String keyid,boolean bereathWater,String temp,boolean fan,boolean sunLightSensor,User user,boolean airSensor,boolean waterTank)
+    public Planter(String Uid,int serNum,boolean bereathWater,String temp,boolean fan,boolean sunLightSensor,User user,boolean airSensor,boolean waterTank)
     {
-        this.keyid = keyid;
+        this.Uid = Uid;
+        this.serNum = serNum;
         this.fan = fan;
         this.temp = temp;
         this.bereathWater = bereathWater;
         this.sunLightSensor =sunLightSensor;
-        this.user = user;
+
         this.airSensor = airSensor;
         this.waterTank = waterTank;
     }
@@ -61,6 +63,14 @@ public class Planter {
         this.waterTank = waterTank;
         this.bereathWater = bereathWater;
         this.sunLightSensor =sunLightSensor;
+    }
+
+    public int getSerNum() {
+        return serNum;
+    }
+
+    public void setSerNum(int serNum) {
+        this.serNum = serNum;
     }
 
     /**
@@ -95,8 +105,8 @@ public class Planter {
      *
      * @return the keyid
      */
-    public String getKeyid() {
-        return keyid;
+    public String getUid() {
+        return Uid;
     }
 
     /**
@@ -153,13 +163,9 @@ public class Planter {
         this.fan = fan;
     }
 
-    /**
-     * Sets keyid.
-     *
-     * @param keyid the keyid
-     */
-    public void setKeyid(String keyid) {
-        this.keyid = keyid;
+
+    public void setUid(String Uid) {
+        this.Uid = Uid;
     }
 
     /**

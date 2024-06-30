@@ -1,5 +1,6 @@
 package com.example.smartplanterproject;
 
+import static android.content.ContentValues.TAG;
 import static com.example.smartplanterproject.FBref.refFlowerpot;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +22,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -61,17 +65,20 @@ public class ViewPlanter extends AppCompatActivity {
      *
      * @author yonatan iluz@
      */
-    int tempChek;
+    int tempChek = -1;
     /**
      * The V.
      */
     ImageView iV;
+    private int serNum;
     private NetworkStateReceiver networkStateReceiver;
     /**
      * The Images ref.
      */
     public StorageReference imagesRef;
-
+    FirebaseUser fbUser;
+    String Uid;
+    private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,37 +89,53 @@ public class ViewPlanter extends AppCompatActivity {
         sunLight = findViewById(R.id.textView6);
         fan = findViewById(R.id.switch1);
         water = findViewById(R.id.switch2);
-        tempChek = Integer.parseInt(temp.getText().toString());
         iV = findViewById(R.id.imageView);
-
-
+        Intent gi = getIntent();
+        serNum = gi.getIntExtra("planterNum",-1);
+        mAuth = FirebaseAuth.getInstance();
+        fbUser = mAuth.getCurrentUser();
+        Uid = fbUser.getUid();
         networkStateReceiver = new NetworkStateReceiver();
         IntentFilter connectFilter = new IntentFilter();
         connectFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(networkStateReceiver,connectFilter);
+
+
         ValueEventListener stuListener = new ValueEventListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                System.out.println("LISTENER");
+
+                Log.d(TAG, "onDataChange triggered");
+
                 for (DataSnapshot data : snapshot.getChildren()) {
                     str = (String) data.getKey();
                     Planter stuTmp = data.getValue(Planter.class);
-                    temp.setText("temperature: " + stuTmp.getTemp());
-                    sunLight.setText("Sunlight: " + stuTmp.getIsSunLightSensor());
-                    humidity.setText("humidity: " + stuTmp.getAirSensor());
+                    if(stuTmp != null){
+                        if(stuTmp.getTemp() != null) {
+                            temp.setText("temperature: " + stuTmp.getTemp());
+                            tempChek = Integer.parseInt(stuTmp.getTemp());
+                        }
+                        sunLight.setText("Sunlight: " + stuTmp.getIsSunLightSensor());
+                        humidity.setText("humidity: " + stuTmp.getAirSensor());
+                    }
+
+                }
+                if (tempChek > 25) { //its not checking the value of the temperature.
+                    NotificationHelper.showNotification(ViewPlanter.this, "It is very hot, the fuel is ventilated for the seedling");
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                System.out.println("CANCELED 2");
             }
         };
-        if (tempChek > 25) {
-            NotificationHelper.showNotification(this, "It is very hot, the fuel is ventilated for the seedling");
-        }
-    }
 
+        System.out.println("REF"+ refFlowerpot);
+        refFlowerpot.child(Uid).child(""+serNum).addValueEventListener(stuListener);
+}
 
 
     public void onDestroy()

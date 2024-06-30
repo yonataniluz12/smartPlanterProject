@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         IntentFilter connectFilter = new IntentFilter();
         connectFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(networkStateReceiver, connectFilter);
+        FirebaseApp.initializeApp(this);
     }
 
     @Override
@@ -64,23 +66,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void register(View view) {
+        System.out.println("inside register?");
         if (emailET != null && passwordET != null) {
-            mAuth.createUserWithEmailAndPassword(emailET.getText().toString(), passwordET.getText().toString())
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                startActivity(new Intent(MainActivity.this, PersonalInformation.class));
-                            } else {
-                                Toast.makeText(MainActivity.this, "Register failed", Toast.LENGTH_SHORT).show();
+            if(!(emailET.getText().toString().isEmpty() || passwordET.getText().toString().isEmpty())) {
+                mAuth.createUserWithEmailAndPassword(emailET.getText().toString(), passwordET.getText().toString())
+                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    System.out.println("success?");
+                                    startActivity(new Intent(MainActivity.this, PersonalInformation.class));
+                                } else {
+                                    System.out.println("fail");
+                                    Toast.makeText(MainActivity.this, "Register failed", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                    });
+                        });
+            } else{
+                Toast.makeText(MainActivity.this, "Email or password field is empty", Toast.LENGTH_SHORT).show();
+            }
         } else {
             Toast.makeText(MainActivity.this, "Email or password field is null", Toast.LENGTH_SHORT).show();
         }
     }
-
     public void goToLogin(View view) {
         startActivity(new Intent(MainActivity.this, Login.class));
     }
